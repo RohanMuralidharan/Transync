@@ -1,5 +1,5 @@
 {
-  "hf_repo": "RohanMuralidharan/Transync",
+  "hf_repo": "facebook/mbart-large-50-many-to-many-mmt",
   "model_dir": "models/transync",
   "sentencepiece_model": "tokenizer/transync_spm.model",
   "dictionary_path": "tokenizer/fairseq_dict.json",

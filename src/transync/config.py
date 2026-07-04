@@ -10,7 +10,7 @@ from typing import Any
 from .utils import load_json
 
 DEFAULT_CONFIG_RELATIVE_PATH = Path("configs") / "transync.json"
-DEFAULT_HF_REPO = "RohanMuralidharan/Transync"
+DEFAULT_HF_REPO = "facebook/mbart-large-50-many-to-many-mmt"
 
 
 @dataclass(frozen=True)
