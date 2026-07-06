@@ -1,4 +1,3 @@
-
 import json
 import os
 import torch
@@ -82,7 +81,22 @@ def encode(text: str, src_flores: str, tgt_flores: str) -> list:
 
     tagged = f"###{src_flores}-to-{tgt_flores}### {text}"
     pieces = sp.encode(tagged, out_type=str)
-    return [src_sym2id.get(p, UNK_ID) for p in pieces] + [EOS_ID]
+    ids = [src_sym2id.get(p, UNK_ID) for p in pieces] + [EOS_ID]
+
+    # Guard: model trained for max 256 positions total (input + output).
+    # If input + EOS exceeds 255, truncate text to leave room for at least 1 output token.
+    MAX_INPUT_TOKENS = MAX_NEW_TOKENS - 1
+    if len(ids) > MAX_INPUT_TOKENS:
+        # Find how many tokens the language tag prefix takes
+        prefix_len = len(sp.encode(f"###{src_flores}-to-{tgt_flores}### ", out_type=str))
+        # Keep the tag, truncate the text portion
+        text_part = pieces[prefix_len:]
+        keep_text = max(0, MAX_INPUT_TOKENS - 1 - prefix_len)  # leave 1 for EOS
+        truncated = pieces[:prefix_len] + text_part[:keep_text]
+        ids = [src_sym2id.get(p, UNK_ID) for p in truncated] + [EOS_ID]
+        print(f"  [Warning] Input truncated ({len(pieces)} → {len(ids)}) to fit 256-position limit")
+
+    return ids
 
 
 def decode(token_ids: list) -> str:
@@ -110,14 +124,15 @@ def _translate_batch(encoded_batch: list) -> list:
 
     with torch.no_grad():
         generated = model.generate(
-            input_ids               = input_ids,
-            attention_mask          = attn_mask,
-            decoder_start_token_id  = EOS_ID,   # fairseq convention: start with EOS
-            num_beams               = BEAM_SIZE,
-            max_new_tokens          = MAX_NEW_TOKENS,
-            early_stopping          = True,
-            no_repeat_ngram_size    = 3,
-            repetition_penalty      = 1.3,
+            input_ids                   = input_ids,
+            attention_mask              = attn_mask,
+            decoder_start_token_id      = EOS_ID,   # fairseq convention: start with EOS
+            num_beams                   = BEAM_SIZE,
+            max_new_tokens              = MAX_NEW_TOKENS,
+            early_stopping              = True,
+            no_repeat_ngram_size        = 3,
+            repetition_penalty          = 1.3,
+            encoder_no_repeat_ngram_size = 3,
         )
 
     return [decode(out.tolist()) for out in generated]
@@ -166,10 +181,11 @@ def translate_batch(texts: list, sl: str, tl: str,
 
 
 if __name__ == "__main__":
-    print(
-        translate_onemt(
-            "నమస్కారం, మీరు ఎలా ఉన్నారు?",
-            "tel",
-            "eng"
-        )
-    )
+    # For Windows console: set PYTHONIOENCODING=utf-8 or use this workaround
+    import sys, io
+    if sys.stdout.encoding != 'utf-8':
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+    # Test: Telugu → English
+    result = translate_onemt("నమస్కారం, మీరు ఎలా ఉన్నారు?", "tel", "eng")
+    print(result)

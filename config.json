@@ -33,5 +33,8 @@
   "transformers_version": "4.57.6",
   "unk_token_id": 3,
   "use_cache": true,
-  "vocab_size": 65401
+  "vocab_size": 65401,
+  "encoder_layernorm_embedding": true,
+  "decoder_layernorm_embedding": true,
+  "normalize_before": true
 }
