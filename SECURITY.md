@@ -48,9 +48,9 @@ If you discover a security vulnerability in Transync, please **do not** open a p
 
 The following are the primary dependencies. Keep them updated:
 
-- PyTorch: https://pytorch.org
-- Transformers: https://github.com/huggingface/transformers
-- tqdm (optional): https://github.com/tqdm/tqdm
+- PyTorch:- https://pytorch.org
+- Transformers:- https://github.com/huggingface/transformers
+- tqdm (optional):- https://github.com/tqdm/tqdm
 
 ## Responsible Disclosure
 
