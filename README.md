@@ -44,6 +44,30 @@ Transync is a powerful multilingual translation model supporting **50+ languages
 pip install -r requirements.txt
 ```
 
+### Download Model Weights
+
+The model weights (~2.4 GB) are not included in the repository. Download them from:
+
+**Option 1: Direct Download**
+1. Go to: https://huggingface.co/facebook/mbart-large-50-one-to-many-mmt
+2. Download `pytorch_model.bin` (2.44 GB)
+3. Place it in the project root directory
+
+**Option 2: Using Python**
+```python
+from huggingface_hub import hf_hub_download
+hf_hub_download(
+    repo_id='facebook/mbart-large-50-one-to-many-mmt',
+    filename='pytorch_model.bin',
+    local_dir='.'
+)
+```
+
+**Option 3: Using huggingface-cli**
+```bash
+huggingface-cli download facebook/mbart-large-50-one-to-many-mmt pytorch_model.bin
+```
+
 ---
 
 ## Quick Start
