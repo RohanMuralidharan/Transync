@@ -30,6 +30,7 @@ logs/
 Thumbs.db
 
 # Large model files (commented out - we need pytorch_model.bin)
+pytorch_model.bin 
 # *.safetensors
 # *.bin
 # *.pt
@@ -39,5 +40,5 @@ Thumbs.db
 # model.safetensors.bak
 # model.safetensors.bak2
 # model_fixed.safetensors
-"# Model file - download from huggingface.co/facebook/mbart-large-50-one-to-many-mmt"  
-"pytorch_model.bin"  
+"# Model file - download from huggingface.co/RohanMuralidharan/Transync-1.3b"  
+
