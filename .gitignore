@@ -29,13 +29,13 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Large model files
-*.safetensors
-*.bin
-*.pt
-*.pth
-*.ckpt
-model.safetensors
-model.safetensors.bak
-model.safetensors.bak2
-model_fixed.safetensors
+# Large model files (commented out - we need pytorch_model.bin)
+# *.safetensors
+# *.bin
+# *.pt
+# *.pth
+# *.ckpt
+# model.safetensors
+# model.safetensors.bak
+# model.safetensors.bak2
+# model_fixed.safetensors
