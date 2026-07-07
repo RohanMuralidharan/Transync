@@ -1,4 +1,4 @@
-"""
+""
 Transync - Indic Multilingual Translation Inference
 Uses facebook/mbart-large-50-one-to-many-mmt model
 Supports 50+ languages including all major Indian languages
