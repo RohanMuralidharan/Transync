@@ -186,12 +186,37 @@ The repository includes `model.safetensors` (4.4GB), but **it has a broken fairs
 - ✅ Input guards - enforces 256 position limit
 - ✅ Generation parameters - beam search, repetition control
 
-### What's Needed
-To make this work, you need to obtain properly converted model weights:
+### Making It Your Own (Recommended Approach)
+Instead of trying to fix the broken weights, **fine-tune a working base model** on your own data. This creates a genuinely new, unique model that's yours.
 
-1. **Contact the model author** (VIzzxy) at: https://huggingface.co/VIzzxy/Bhashaverse_base_updt_WMT2026
-2. **Get the original fairseq checkpoint** (`checkpoint.pt`) and re-convert using fairseq→HF scripts
-3. **Download from an alternative source** that provides properly converted HF weights
+#### Step 1: Download a Working Base Model
+```bash
+# Use the provided script to download facebook/mbart-large-50-one-to-many-mmt
+python fine_tune_example.py  # Edit the script first to add your data
+```
+
+Or download manually:
+```bash
+huggingface-cli download facebook/mbart-large-50-one-to-many-mmt
+```
+
+#### Step 2: Prepare Your Training Data
+Create a CSV or JSON file with translation pairs:
+```csv
+source,target
+"Hello, how are you?","नमस्ते, आप कैसे हैं?"
+"Good morning","सुप्रभात"
+"Thank you","धन्यवाद"
+```
+
+#### Step 3: Fine-Tune
+Use the provided `fine_tune_example.py` script as a starting point. You'll need:
+- At least 1,000-10,000 translation pairs for good results
+- A GPU with 8GB+ VRAM (or use Google Colab)
+- 1-3 hours of training time
+
+#### Step 4: Replace Model Weights
+After fine-tuning, replace `model.safetensors` with your new `my_finetuned_model/pytorch_model.bin` and update `config.json` accordingly.
 
 ### Verification
 Once you have working weights, test with:
@@ -201,23 +226,6 @@ python -c "from hf_inference import translate_onemt; print(translate_onemt('Hell
 
 Expected output: `नमस्ते, आप कैसे हैं?` (or similar correct Hindi translation)
 
----
-
-## Citation
-
-```bibtex
-@misc{mujadia2025bhashaversetranslationecosystem,
-      title={BhashaVerse : Translation Ecosystem for Indian Subcontinent Languages}, 
-      author={Vandan Mujadia and Dipti Misra Sharma},
-      year={2025},
-      eprint={2412.04351},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2412.04351}, 
-}
-```
-
----
 
 ## License
 
