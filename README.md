@@ -102,21 +102,21 @@ pip install -r requirements.txt
 ```python
 from hf_inference import translate_onemt, translate_batch
 
-# Single sentence — English → Telugu
-print(translate_onemt("Hello, how are you?", "eng", "tel"))
-# హలో, మీరు ఎలా ఉన్నారు?
+# Single sentence — English → Hindi
+print(translate_onemt("Hello, how are you?", "eng", "hin"))
+# Expected: नमस्ते, आप कैसे हैं?
 
 # Code-mixed Hindi → Telugu
 print(translate_onemt("मुझे meeting attend करनी है।", "hin", "tel"))
-# నాకు మీటింగ్‌కు హాజరు కావాలి.
+# Expected: నాకు మీటింగ్‌కు హాజరు కావాలి.
 
 # Telugu → English
 print(translate_onemt("నమస్కారం, మీరు ఎలా ఉన్నారు?", "tel", "eng"))
-# Hello, how are you?
+# Expected: Hello, how are you?
 
 # Tamil → Hindi
 print(translate_onemt("இன்று வானிலை நன்றாக உள்ளது.", "tam", "hin"))
-# आज मौसम अच्छा है।
+# Expected: आज मौसम अच्छा है।
 
 # Batch translation
 sentences = ["Good morning.", "Thank you.", "See you tomorrow."]
@@ -124,6 +124,8 @@ results   = translate_batch(sentences, sl="eng", tl="hin", batch_size=32)
 for src, tgt in zip(sentences, results):
     print(f"{src}  →  {tgt}")
 ```
+
+> ⚠️ **Important:** The current `model.safetensors` file has a broken fairseq→HF conversion. The model loads successfully but produces garbled output. You need to obtain properly converted weights for this to work. See the [Model Weights](#model-weights) section below.
 
 ---
 
@@ -170,6 +172,34 @@ The `hf_inference.py` script handles this correctly using `onemtv3b_spm.model` f
 | `max_new_tokens` | 256 | Matches model's trained max position |
 | `no_repeat_ngram_size` | 3 | Reduces repetition |
 | `repetition_penalty` | 1.3 | Additional repetition control |
+
+---
+
+## Model Weights
+
+### Current Status
+The repository includes `model.safetensors` (4.4GB), but **it has a broken fairseq→HuggingFace conversion**. The model loads successfully (1.1B parameters) but produces garbled output because the weight mapping between fairseq and HF MBart architectures is incorrect.
+
+### What's Fixed
+- ✅ Tokenization pipeline (`hf_inference.py`) - correctly uses SPM + fairseq dict
+- ✅ Config parameters - added missing normalization flags
+- ✅ Input guards - enforces 256 position limit
+- ✅ Generation parameters - beam search, repetition control
+
+### What's Needed
+To make this work, you need to obtain properly converted model weights:
+
+1. **Contact the model author** (VIzzxy) at: https://huggingface.co/VIzzxy/Bhashaverse_base_updt_WMT2026
+2. **Get the original fairseq checkpoint** (`checkpoint.pt`) and re-convert using fairseq→HF scripts
+3. **Download from an alternative source** that provides properly converted HF weights
+
+### Verification
+Once you have working weights, test with:
+```bash
+python -c "from hf_inference import translate_onemt; print(translate_onemt('Hello, how are you?', 'eng', 'hin'))"
+```
+
+Expected output: `नमस्ते, आप कैसे हैं?` (or similar correct Hindi translation)
 
 ---
 
