@@ -1,5 +1,5 @@
 {
-  "_name_or_path": "/home/suraj/projects/mbart-50/hf_models/mbart-50-large-one-to-many/",
+  "_name_or_path": "facebook/mbart-large-50-one-to-many-mmt",
   "_num_labels": 3,
   "activation_dropout": 0.0,
   "activation_function": "relu",
@@ -51,7 +51,7 @@
   "scale_embedding": true,
   "static_position_embeddings": false,
   "tokenizer_class": "MBart50Tokenizer",
-  "transformers_version": "4.9.0.dev0",
+  "transformers_version": "4.44.0",
   "use_cache": true,
   "vocab_size": 250054
 }
