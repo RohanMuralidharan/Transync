@@ -1,6 +1,6 @@
 # Transync — Indic Multilingual Translation
 
-Transync is a powerful multilingual translation model supporting **50+ languages** including all major Indian languages (Hindi, Telugu, Tamil, Bengali, Gujarati, Marathi, Punjabi, Urdu, and more). Built on Facebook's MBart architecture, it provides high-quality translations for Indic languages.
+Transync is a powerful multilingual translation model supporting **50+ languages** including all major Indian languages (Hindi, Telugu, Tamil, Bengali, Gujarati, Marathi, Punjabi, Urdu, and more). Built on MBart architecture, it provides high-quality translations for Indic languages.
 ---
 ## Supported Languages
 | Short Code | Language | Script | MBart Code |
@@ -81,15 +81,6 @@ source text
 ```
 
 The model uses the standard MBart50 tokenizer with language codes for high-quality multilingual translation.
-
----
-
-## Verification
-
-Test the model with:
-```bash
-python transync_inference.py eng hin "Hello, how are you?"
-```
 
 ---
 
